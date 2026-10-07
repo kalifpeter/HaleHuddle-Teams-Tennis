@@ -329,6 +329,8 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
 
     document.querySelectorAll('.team-a-label').forEach(el => el.textContent = teamA());
     document.querySelectorAll('.team-b-label').forEach(el => el.textContent = teamB());
+    document.querySelectorAll('.default-side.side-a').forEach(el => el.textContent = teamA());
+    document.querySelectorAll('.default-side.side-b').forEach(el => el.textContent = teamB());
     $('totalLabelA').textContent = teamA() + ' Total';
     $('totalLabelB').textContent = teamB() + ' Total';
     $('sportLabelA').textContent = teamA();
@@ -373,8 +375,9 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
       lines.push('');
     });
 
-    lines.push('TEAM TOTALS');
-    lines.push(teamA() + ': ' + ta + ' | ' + teamB() + ': ' + tb);
+    lines.push('FINAL SCORE');
+    lines.push(teamA() + ' — ' + ta);
+    lines.push(teamB() + ' — ' + tb);
     lines.push('Overall: ' + (!completed ? '—' : ta > tb ? teamA() : tb > ta ? teamB() : 'Tie'));
     lines.push('');
     lines.push('SPORTSMANSHIP');

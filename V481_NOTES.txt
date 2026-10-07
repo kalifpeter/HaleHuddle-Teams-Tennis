@@ -1,0 +1,23 @@
+HaleHuddle Teams — Tennis V4.81
+
+Built directly from HH_Teams_V48_Default_Forfeit_INTEGRATION_TEST.
+
+ONLY approved changes in V4.81:
+1. Default / Forfeit winner buttons now display the actual Team 1 and Team 2 names as entered/loaded for the match.
+2. Coach Recap/share text now includes a clear FINAL SCORE block with each actual team name and its final team game total on its own line.
+
+Single Set example:
+FINAL SCORE
+Lokahi 3 — 18
+Ewa Beach Royals — 12
+
+2 Sets + 10-Point Tiebreak example uses total games for the final score because the current approved scorecard determines Overall by Games; Sets Won remains shown directly below the final score.
+
+Preserved unchanged:
+- V4.7 protected baseline behavior
+- V4.8 Default / Forfeit scoring behavior
+- HaleHuddle branding / approved logos / dark mode
+- setup, lineup, parent view, season history, sharing, PWA files
+- all other files and workflows
+
+Generic JTT Scorecard repository/build is NOT part of this package and was not touched.

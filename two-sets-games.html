@@ -395,6 +395,8 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
 
     document.querySelectorAll('.team-a-label').forEach(el => el.textContent = teamA());
     document.querySelectorAll('.team-b-label').forEach(el => el.textContent = teamB());
+    document.querySelectorAll('.default-side.side-a').forEach(el => el.textContent = teamA());
+    document.querySelectorAll('.default-side.side-b').forEach(el => el.textContent = teamB());
     document.querySelectorAll('.score-team-a').forEach(el => el.textContent = teamA());
     document.querySelectorAll('.score-team-b').forEach(el => el.textContent = teamB());
 
@@ -490,9 +492,10 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
       lines.push('');
     });
 
-    lines.push('TEAM TOTALS');
+    lines.push('FINAL SCORE');
+    lines.push(teamA() + ' — ' + gamesA);
+    lines.push(teamB() + ' — ' + gamesB);
     lines.push('Sets Won: ' + teamA() + ' ' + setsA + ' | ' + teamB() + ' ' + setsB);
-    lines.push('Total Games: ' + teamA() + ' ' + gamesA + ' | ' + teamB() + ' ' + gamesB);
     lines.push('Overall: ' + (gamesA>gamesB ? teamA() : gamesB>gamesA ? teamB() : 'Tie'));
     lines.push('');
     lines.push('SPORTSMANSHIP');

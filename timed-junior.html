@@ -272,7 +272,7 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
     try{
       if(!('serviceWorker' in navigator)||!('PushManager' in window)||!('Notification' in window))
         throw new Error('Notifications require the installed Home Screen app on a supported browser.');
-      const reg=await navigator.serviceWorker.register('sw.js?v=locked-screen-3',{scope:'./',updateViaCache:'none'});
+      const reg=await navigator.serviceWorker.register('sw.js?v=locked-screen-4',{scope:'./',updateViaCache:'none'});
       await reg.update();
       await navigator.serviceWorker.ready;
       const permission=await Notification.requestPermission();
@@ -294,7 +294,7 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
       throw new Error('Locked-screen notifications are not supported here. Open the installed Home Screen app.');
     if(Notification.permission!=='granted')
       throw new Error('Tap Enable iPhone Notifications before starting the timer.');
-    const reg=await navigator.serviceWorker.register('sw.js?v=locked-screen-3',{scope:'./',updateViaCache:'none'});
+    const reg=await navigator.serviceWorker.register('sw.js?v=locked-screen-4',{scope:'./',updateViaCache:'none'});
     await reg.update();
     await navigator.serviceWorker.ready;
     let sub=await reg.pushManager.getSubscription();
@@ -340,7 +340,7 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
     $('pushStatus').textContent='Notifications previously enabled on this device.';
     $('enablePush').textContent='Refresh Notification Permission';
   }
-  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=locked-screen-3',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=locked-screen-4',{scope:'./',updateViaCache:'none'}).then(r=>r.update()).catch(()=>{});
 
   const timerAudio=$('timerAlertAudio');
 
@@ -663,9 +663,10 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
       lines.push('');
     });
 
-    lines.push('TEAM TOTALS');
+    lines.push('FINAL SCORE');
+    lines.push(teamA()+' — '+totalA);
+    lines.push(teamB()+' — '+totalB);
     lines.push('Match Wins: '+teamA()+' '+winsA+' | '+teamB()+' '+winsB);
-    lines.push('Total Score: '+teamA()+' '+totalA+' | '+teamB()+' '+totalB);
     lines.push('Overall: '+(totalA>totalB?teamA():totalB>totalA?teamB():'Tie'));
     lines.push('');
     lines.push('SPORTSMANSHIP');
