@@ -1,0 +1,12 @@
+HaleHuddle Teams — Tennis V4.82
+Built from V4.81.
+
+Role separation cleanup:
+- Head Coach Match Day now stays in the Head Coach flow and returns Home.
+- Head Coach opens scorecards without Parent Coach view flags.
+- Parent Coach remains a separate restricted experience reached only through its own role/page.
+- Parent Coach mode continues to use ?view=parent and returns to Parent Coach.
+- No Parent Coach preview/navigation link is shown in the Head Coach interface.
+- Head Coach retains full access to Match Day and all scorecards.
+
+Preserved V4.81 scoring/default/forfeit changes and existing branding/layout.
