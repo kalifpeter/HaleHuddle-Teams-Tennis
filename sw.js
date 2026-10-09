@@ -1,5 +1,5 @@
-const APP_URL='https://kalifpeter.github.io/HaleHuddle-Teams-Tennis/timed-junior.html';
-const ICON_URL='https://kalifpeter.github.io/HaleHuddle-Teams-Tennis/app-icon-192.png';
+const APP_URL='https://kalifpeter.github.io/HaleHuddle-Tennis-Scorecard/timed-junior.html';
+const ICON_URL='https://kalifpeter.github.io/HaleHuddle-Tennis-Scorecard/app-icon-192.png';
 
 self.addEventListener('install',event=>{ self.skipWaiting(); });
 self.addEventListener('activate',event=>{ event.waitUntil(self.clients.claim()); });

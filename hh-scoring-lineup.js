@@ -16,8 +16,8 @@ const read=()=>{try{return JSON.parse(localStorage.getItem(REGISTRY)||'[]').filt
 let items=[];
 function refresh(){items=read().sort((a,b)=>b.date.localeCompare(a.date));pick.replaceChildren(new Option('Select match date / team',''));items.forEach(x=>pick.add(new Option(`${x.date} · ${x.teamName} vs ${x.opponent||'Opponent'} · ${x.divisionName}`,x.id)));status.textContent=items.length?'Select a saved lineup to fill this scorecard.':'No saved lineups for this scoring format. Save one in Match Lineup first.';}
 function set(id,value){const el=document.getElementById(id);if(!el)return;el.value=value||'';el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}
-function apply(x){if(!x)return;const existing=document.querySelectorAll('.match input.score');if(Array.from(existing).some(el=>el.value!=='')){if(!confirm('Loading this lineup changes player and match details but retains entered scores. Continue?'))return;}
-set('date',x.date);set('teamA',x.teamName);set('teamB',x.opponent);set('seasonName',x.season);
+function apply(x){if(!x)return;const existing=document.querySelectorAll('.match input.score');if(Array.from(existing).some(el=>el.value!=='')){if(!window.confirm('Loading this lineup changes player and match details but retains entered scores. Continue?')){refresh();return;}}
+date.value=x.date;date.dispatchEvent(new Event('input',{bubbles:true}));set('teamA',x.teamName);set('teamB',x.opponent);set('seasonName',x.season);
 const athletes=new Map((x.athletes||[]).map(a=>[a.id,a.name]));
 document.querySelectorAll('.match').forEach(card=>{const ids=x.assignments?.[card.dataset.name]||[];['.player-a1','.player-a2'].forEach((sel,i)=>{const el=card.querySelector(sel);if(el){el.value=athletes.get(ids[i])||'';el.dispatchEvent(new Event('input',{bubbles:true}));}})});
 status.textContent='Loaded '+x.date+' · '+x.teamName+'. Opponent player names can be entered on the scorecard.';
