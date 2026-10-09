@@ -44,9 +44,13 @@ input:focus{outline:3px solid rgba(15,81,50,.14);border-color:var(--accent)}
 .winner.has{background:var(--win)}
 .versus{
   display:grid;grid-template-columns:minmax(0,1fr) 30px minmax(0,1fr);
-  gap:8px;align-items:end
+  gap:8px;align-items:start
 }
-.side{min-width:0}
+.side{min-width:0;display:flex;flex-direction:column;align-items:stretch}
+.versus .side .team-label{min-height:18px}
+.versus .side .player{flex:none}
+.versus .side .score{flex:none;margin-top:0}
+.versus .vs{align-self:end;margin-bottom:16px}
 .team-label{
   font-size:12px;font-weight:900;color:var(--muted);margin-bottom:5px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis
@@ -129,7 +133,7 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
 </style></head>
 
 <style id="hh-v48-default-forfeit">
-.default-toggle{margin-top:10px;width:100%;background:#34475e;color:#fff;border:0;border-radius:12px;padding:12px;font-weight:850}.default-panel{display:none;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}.default-panel.open{display:block}.default-panel h4{margin:0 0 8px}.default-side-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.default-side{background:#34475e;color:#fff}.default-side.selected{outline:3px solid #135BE8}.default-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.default-status{font-weight:900;margin-top:8px}.match.is-default{outline:2px solid #135BE8}.default-games{width:100%;box-sizing:border-box}.default-panel label{display:block;margin-top:10px;font-weight:800}html[data-hh-theme="dark"] .default-panel{background:#172438!important;border-color:#577395!important;color:#f2f6ff!important}
+.match > .default-toggle{display:block;clear:both;position:static;margin-top:12px;width:100%;background:#34475e;color:#fff;border:0;border-radius:12px;padding:12px;font-weight:850}.match > .default-panel{clear:both;display:none;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}.match > .default-panel.open{display:block}.default-panel h4{margin:0 0 8px}.default-side-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.default-side{background:#34475e;color:#fff}.default-side.selected{outline:3px solid #135BE8}.default-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.default-status{font-weight:900;margin-top:8px}.match.is-default{outline:2px solid #135BE8}.default-games{width:100%;box-sizing:border-box}.default-panel label{display:block;margin-top:10px;font-weight:800}html[data-hh-theme="dark"] .default-panel{background:#172438!important;border-color:#577395!important;color:#f2f6ff!important}
 </style>
 <body data-hh-score-format="single">
 
