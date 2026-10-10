@@ -1,0 +1,1 @@
+V4.87 Junior Timed Default/Forfeit selection fix. Selection no longer re-renders and destroys active panel. Single Set and Two Sets reviewed; their selection handlers do not re-render. Preserves V4.86 routing, V4.85 alignment and role separation. Requires iPhone test before approval.

@@ -553,7 +553,7 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
           <label><span class="team-b-label"></span><input class="score sb" type="number" inputmode="numeric" min="0" placeholder="Score" value="${escapeHtml(c.scoreB)}"></label>
         </div>
         <button class="default-toggle" type="button">Default / Forfeit</button>
-        <div class="default-panel ${c.isDefault?'open':''}"><h4>Who receives the win?</h4><div class="default-side-row"><button class="default-side side-a ${c.defaultWinner==='A'?'selected':''}" type="button">${teamA()}</button><button class="default-side side-b ${c.defaultWinner==='B'?'selected':''}" type="button">${teamB()}</button></div><label>Games awarded<input class="default-games" type="number" inputmode="numeric" min="0" value="${escapeHtml(c.awardedGames||0)}"></label><div class="default-actions"><button class="apply-default primary" type="button">Apply Default / Forfeit</button><button class="cancel-default secondary" type="button">Cancel</button></div><div class="default-status">${c.isDefault?'Default / Forfeit applied':''}</div></div>
+        <div class="default-panel"><h4>Who receives the win?</h4><div class="default-side-row"><button class="default-side side-a ${c.defaultWinner==='A'?'selected':''}" type="button">${teamA()}</button><button class="default-side side-b ${c.defaultWinner==='B'?'selected':''}" type="button">${teamB()}</button></div><label>Games awarded<input class="default-games" type="number" inputmode="numeric" min="0" value="${escapeHtml(c.awardedGames||0)}"></label><div class="default-actions"><button class="apply-default primary" type="button">Apply Default / Forfeit</button><button class="cancel-default secondary" type="button">Cancel</button></div><div class="default-status">${c.isDefault?'Default / Forfeit applied':''}</div></div>
         <div class="timerbox">
           <div class="timer ${c.running?'running':c.ended?'time-up':''}" data-role="timer">${c.ended?'TIME':fmtTime(c.remaining)}</div>
           <div class="timer-actions">
@@ -575,7 +575,15 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
       q('.sb').addEventListener('input',e=>{c.scoreB=e.target.value;update();});
 
       q('.default-toggle').addEventListener('click',()=>q('.default-panel').classList.toggle('open'));
-      q('.side-a').addEventListener('click',()=>{c.defaultWinner='A';render()});q('.side-b').addEventListener('click',()=>{c.defaultWinner='B';render()});
+      // Keep the active panel and its entered games intact while choosing a winner.
+      // Re-rendering here used to destroy the panel, causing Apply to report no winner.
+      const chooseDefaultWinner=(side)=>{
+        c.defaultWinner=side;
+        q('.side-a').classList.toggle('selected',side==='A');
+        q('.side-b').classList.toggle('selected',side==='B');
+      };
+      q('.side-a').addEventListener('click',()=>chooseDefaultWinner('A'));
+      q('.side-b').addEventListener('click',()=>chooseDefaultWinner('B'));
       q('.cancel-default').addEventListener('click',()=>q('.default-panel').classList.remove('open'));
       q('.apply-default').addEventListener('click',()=>{if(!c.defaultWinner)return alert('Choose which team receives the win.');c.awardedGames=Math.max(0,Math.floor(Number(q('.default-games').value)||0));c.isDefault=true;c.scoreA=c.defaultWinner==='A'?String(c.awardedGames):'0';c.scoreB=c.defaultWinner==='B'?String(c.awardedGames):'0';c.running=false;c.ended=true;c.endAt=null;c.remaining=0;cancelPush(c);save();render()});
 
