@@ -118,23 +118,23 @@ html[data-hh-theme="dark"] .recap{background:#172438!important;color:#f2f6ff!imp
 html[data-hh-theme="dark"] .recap *{color:#f2f6ff!important}
 html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8!important}
 
-</style><style id="hh-timed-rebuilt-cards">
-.rebuilt-court .rebuilt-teams{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
-.rebuilt-court .rebuilt-team{min-width:0;display:flex;flex-direction:column;gap:7px}
-.rebuilt-court .rebuilt-team .player,.rebuilt-court .rebuilt-team .score{box-sizing:border-box;width:100%;margin:0;min-width:0}
-.rebuilt-court .rebuilt-team .team-label{margin:0;min-height:18px}
-.rebuilt-court .default-toggle{display:block;width:100%;margin-top:12px;min-height:45px;text-align:center;font-weight:800}
-.rebuilt-court .rebuilt-default{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:12px}
-.rebuilt-court .rebuilt-default[hidden]{display:none!important}
-.rebuilt-court .default-title{font-weight:800;margin-bottom:9px}
-.rebuilt-court .default-side-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-bottom:12px}
-.rebuilt-court .default-side{min-width:0;white-space:normal;overflow-wrap:anywhere;min-height:45px}
-.rebuilt-court .default-side.selected{background:var(--accent)!important;color:white!important;outline:2px solid var(--accent)}
-.rebuilt-court .default-games-label{display:block;font-weight:700;margin-bottom:12px}
-.rebuilt-court .default-games{box-sizing:border-box;width:100%;margin-top:5px}
-.rebuilt-court .default-actions{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px}
-.rebuilt-court .default-actions button{white-space:normal;min-width:0}
-.rebuilt-court .default-status{font-weight:700;margin-top:6px}
+</style><style id="hh-junior-court-v489">
+.junior-court .court-teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+.junior-court .court-team{display:flex;flex-direction:column;gap:8px;min-width:0}
+.junior-court .court-team input{width:100%;min-width:0;box-sizing:border-box;margin:0}
+.junior-court .court-team .team-label{min-height:18px;margin:0}
+.junior-court .forfeit-open{display:block;width:100%;margin-top:14px;text-align:center;min-height:48px;background:#354960;color:#fff}
+.junior-court .forfeit-form{margin-top:12px;border:1px solid var(--line);border-radius:12px;padding:12px}
+.junior-court .forfeit-form[hidden]{display:none!important}
+.junior-court .forfeit-heading{font-weight:800;margin-bottom:10px}
+.junior-court .forfeit-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.junior-court .forfeit-choice{background:#354960;color:#fff;min-width:0;overflow-wrap:anywhere;border:2px solid transparent}
+.junior-court .forfeit-choice[aria-pressed="true"]{background:#135be8!important;border-color:#fff!important;color:#fff!important}
+.junior-court .forfeit-games{display:block;font-weight:700;margin-top:12px}
+.junior-court .forfeit-games input{width:100%;box-sizing:border-box;margin-top:6px}
+.junior-court .forfeit-actions{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px;margin-top:12px}
+.junior-court .forfeit-actions button{white-space:normal;min-width:0}
+.junior-court .forfeit-error{color:#ffb3a9;font-weight:700;margin-top:8px}
 </style>
 </head>
 <body>
@@ -538,57 +538,48 @@ html[data-hh-theme="dark"] :is(.totalbox,.totalbox *, .has,.has *){color:#f3fff8
     return a>b?'A':'B';
   }
 
-  // Rebuilt court-card engine: a single consistent two-column scorecard structure.
+  // V4.89: complete court renderer with independent, accessible default selection.
   function render(){
     matchesHost.replaceChildren();
     if(!state.courts.length){matchesHost.innerHTML='<section class="card empty">Choose at least one Singles or Doubles match above, then tap Apply.</section>';}
     state.courts.forEach((c,idx)=>{
-      const el=document.createElement('section');el.className='match-card rebuilt-court';
+      const el=document.createElement('section');el.className='match-card junior-court';
       const doubles=c.type==='Doubles';
-      el.innerHTML=`
-        <div class="matchhead"><div class="matchtitle">${c.label}</div><div class="result" data-role="result">Winner: —</div></div>
-        <div class="rebuilt-teams">
-          <div class="rebuilt-team"><div class="team-label team-a-label"></div>
-            <input class="player a1" type="text" placeholder="Player 1" value="${escapeHtml(c.pA1)}">
-            ${doubles?`<input class="player a2" type="text" placeholder="Player 2" value="${escapeHtml(c.pA2)}">`:''}
-            <input class="score sa" type="number" inputmode="numeric" min="0" placeholder="Score" value="${escapeHtml(c.scoreA)}">
-          </div>
-          <div class="rebuilt-team"><div class="team-label team-b-label"></div>
-            <input class="player b1" type="text" placeholder="${doubles?'Player 1':'Opponent name'}" value="${escapeHtml(c.pB1)}">
-            ${doubles?`<input class="player b2" type="text" placeholder="Player 2" value="${escapeHtml(c.pB2)}">`:''}
-            <input class="score sb" type="number" inputmode="numeric" min="0" placeholder="Score" value="${escapeHtml(c.scoreB)}">
-          </div>
-        </div>
-        <button class="default-toggle" type="button" aria-expanded="false">Default / Forfeit</button>
-        <div class="rebuilt-default" hidden>
-          <div class="default-title">Who receives the win?</div>
-          <div class="default-side-row"><button class="default-side side-a" type="button" aria-pressed="false"></button><button class="default-side side-b" type="button" aria-pressed="false"></button></div>
-          <label class="default-games-label">Games awarded to winning team<input class="default-games" type="number" inputmode="numeric" min="1" value="${escapeHtml(c.awardedGames||0)}"></label>
-          <div class="default-actions"><button class="apply-default primary" type="button">Apply Default / Forfeit</button><button class="cancel-default secondary" type="button">Cancel</button></div>
-          <div class="default-status" role="status"></div>
-        </div>
-        <div class="timerbox"><div class="timer ${c.running?'running':c.ended?'time-up':''}" data-role="timer">${c.ended?'TIME':fmtTime(c.remaining)}</div>
-          <div class="timer-actions"><button class="primary start" type="button">${c.running?'Running':'Start'}</button><button class="secondary pause" type="button">Pause</button><button class="secondary reset" type="button">Reset</button><button class="danger end" type="button">End</button></div>
-        </div>`;
+      const players=(side)=>{
+        const x=side==='A'?'a':'b',prefix=side==='A'?'pA':'pB';
+        return `<input class="player ${x}1" type="text" placeholder="${side==='B'&&!doubles?'Opponent name':'Player 1'}" value="${escapeHtml(c[prefix+'1'])}">`+
+          (doubles?`<input class="player ${x}2" type="text" placeholder="Player 2" value="${escapeHtml(c[prefix+'2'])}">`:'');
+      };
+      el.innerHTML=`<div class="matchhead"><div class="matchtitle">${escapeHtml(c.label)}</div><div class="result" data-role="result">Winner: —</div></div>
+      <div class="court-teams"><div class="court-team"><div class="team-label team-a-label"></div>${players('A')}<input class="score sa" type="number" inputmode="numeric" min="0" placeholder="Score" value="${escapeHtml(c.scoreA)}"></div>
+      <div class="court-team"><div class="team-label team-b-label"></div>${players('B')}<input class="score sb" type="number" inputmode="numeric" min="0" placeholder="Score" value="${escapeHtml(c.scoreB)}"></div></div>
+      <button class="forfeit-open" type="button" aria-expanded="false">Default / Forfeit</button>
+      <div class="forfeit-form" hidden><div class="forfeit-heading">Who receives the win?</div>
+      <div class="forfeit-choices"><button type="button" class="forfeit-choice" data-side="A" aria-pressed="false"></button><button type="button" class="forfeit-choice" data-side="B" aria-pressed="false"></button></div>
+      <label class="forfeit-games">Games awarded to winning team<input class="forfeit-count" type="number" min="1" inputmode="numeric" value="${c.awardedGames>0?c.awardedGames:1}"></label>
+      <div class="forfeit-actions"><button type="button" class="forfeit-apply primary">Apply Default / Forfeit</button><button type="button" class="forfeit-cancel secondary">Cancel</button></div>
+      <div class="forfeit-error" role="status" aria-live="polite"></div></div>
+      <div class="timerbox"><div class="timer ${c.running?'running':c.ended?'time-up':''}" data-role="timer">${c.ended?'TIME':fmtTime(c.remaining)}</div>
+      <div class="timer-actions"><button class="primary start" type="button">${c.running?'Running':'Start'}</button><button class="secondary pause" type="button">Pause</button><button class="secondary reset" type="button">Reset</button><button class="danger end" type="button">End</button></div></div>`;
       matchesHost.appendChild(el);
-      const q=sel=>el.querySelector(sel);
+      const q=selector=>el.querySelector(selector);
       for(const [selector,key] of [['.a1','pA1'],['.a2','pA2'],['.b1','pB1'],['.b2','pB2'],['.sa','scoreA'],['.sb','scoreB']]){
-        const input=q(selector);if(input)input.addEventListener('input',e=>{c[key]=e.target.value;if(key==='scoreA'||key==='scoreB'){c.isDefault=false;c.defaultWinner=null;}update();});
+        const field=q(selector);if(field)field.addEventListener('input',event=>{c[key]=event.target.value;if(key==='scoreA'||key==='scoreB'){c.isDefault=false;c.defaultWinner=null;}update();});
       }
-      const panel=q('.rebuilt-default'),toggle=q('.default-toggle'),status=q('.default-status');
-      let selected=c.isDefault?c.defaultWinner:null;
-      function syncSelection(){for(const side of ['A','B']){const btn=q(side==='A'?'.side-a':'.side-b');btn.textContent=side==='A'?teamA():teamB();btn.classList.toggle('selected',selected===side);btn.setAttribute('aria-pressed',String(selected===side));}}
-      syncSelection();
-      toggle.addEventListener('click',()=>{panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',String(!panel.hidden));syncSelection();});
-      q('.side-a').addEventListener('click',()=>{selected='A';status.textContent='';syncSelection();});
-      q('.side-b').addEventListener('click',()=>{selected='B';status.textContent='';syncSelection();});
-      q('.cancel-default').addEventListener('click',()=>{panel.hidden=true;toggle.setAttribute('aria-expanded','false');selected=c.isDefault?c.defaultWinner:null;syncSelection();});
-      q('.apply-default').addEventListener('click',()=>{
-        if(!selected){status.textContent='Select the winning team above.';return;}
-        const games=Number(q('.default-games').value);
-        if(!Number.isInteger(games)||games<1){status.textContent='Enter a positive number of awarded games.';return;}
-        c.defaultWinner=selected;c.awardedGames=games;c.isDefault=true;
-        c.scoreA=selected==='A'?String(games):'0';c.scoreB=selected==='B'?String(games):'0';
+      const panel=q('.forfeit-form'),opener=q('.forfeit-open'),error=q('.forfeit-error');
+      let chosen=c.isDefault?c.defaultWinner:null;
+      const choices=[...el.querySelectorAll('.forfeit-choice')];
+      function paint(){choices.forEach(btn=>{btn.textContent=btn.dataset.side==='A'?teamA():teamB();btn.setAttribute('aria-pressed',String(chosen===btn.dataset.side));});}
+      paint();
+      opener.addEventListener('click',()=>{panel.hidden=!panel.hidden;opener.setAttribute('aria-expanded',String(!panel.hidden));error.textContent='';paint();});
+      choices.forEach(btn=>btn.addEventListener('click',()=>{chosen=btn.dataset.side;error.textContent='';paint();}));
+      q('.forfeit-cancel').addEventListener('click',()=>{panel.hidden=true;opener.setAttribute('aria-expanded','false');chosen=c.isDefault?c.defaultWinner:null;paint();error.textContent='';});
+      q('.forfeit-apply').addEventListener('click',()=>{
+        if(chosen!=='A'&&chosen!=='B'){error.textContent='Choose a winning team first.';return;}
+        const count=Number(q('.forfeit-count').value);
+        if(!Number.isInteger(count)||count<1){error.textContent='Enter at least 1 awarded game.';return;}
+        c.defaultWinner=chosen;c.awardedGames=count;c.isDefault=true;
+        c.scoreA=chosen==='A'?String(count):'0';c.scoreB=chosen==='B'?String(count):'0';
         c.running=false;c.ended=true;c.endAt=null;c.remaining=0;cancelPush(c);save();render();
       });
       q('.start').addEventListener('click',()=>{unlockAudio();if(c.remaining<=0)c.remaining=c.duration;c.running=true;c.ended=false;c.endAt=Date.now()+c.remaining*1000;save();schedulePush(c);render();});
